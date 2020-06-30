@@ -32,7 +32,6 @@ const TaskSchema = new mongoose.Schema({
   description: {
     type: String,
     default: '',
-    required: true
   },
   comments: {
     type: Array,

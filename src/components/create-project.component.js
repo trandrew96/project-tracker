@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { getFromStorage } from '../utils/storage';
+import Alert from './alert.component';
 
 export default class CreateProject extends Component {
   constructor(props) {
@@ -96,13 +97,9 @@ export default class CreateProject extends Component {
       return (
         <div>
           <h1>Create a Project</h1>
-           {           
-              (message && success) ? (
-                <div className="alert alert-success">
-                  <p>{message}</p>
-                </div>
-              ) : (null)
-            }
+          <div>
+            <Alert message={message} success={success}></Alert>
+          </div>
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
               <label>Title: </label>

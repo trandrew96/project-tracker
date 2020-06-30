@@ -18,6 +18,9 @@ export default class Navbar extends Component {
           <li className="navbar-item">
             <Link to="/create-task" className="nav-link">Create Task</Link>
           </li>
+          <li className="navbar-item">
+            <Link to="/tasks" className="nav-link">Tasks</Link>
+          </li>
         </ul>
         </div>
       </nav>

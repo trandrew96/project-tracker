@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { getFromStorage } from '../utils/storage';
+import Alert from './alert.component';
 
 export default class CreateTask extends Component {
   constructor(props) {
@@ -151,15 +152,8 @@ export default class CreateTask extends Component {
       <div>
         <h1>Create a Task</h1>
         <div>
-          {
-            (message && success) ? (
-              <div className="alert alert-success">
-                <p>{message}</p>
-              </div>
-            ) : (null)
-          }
+          <Alert message={message} success={success}></Alert>
         </div>
-        {/* <form onSubmit={this.onSubmit}> */}
         <form>  
           <div className="form-group"> 
             <label>Project: </label>

@@ -7,19 +7,12 @@ const Project = props => (
     <td>{props.project.title}</td>
     <td>{props.project.description}</td>
     <td>{props.project.username}</td>
-    {/* <td>{props.project.userId}</td> */}
-    {/* <td>{props.project.date.substring(0, 10)}</td> */}
-    {/* <td>
-      <Link to={"/edit/"+props.exercise._id}>edit</Link> | <a href="#" onClick={() => { props.deleteExercise(props.exercise._id)}}>delete</a>
-    </td> */}
   </tr>
 )
 
 export default class ProjectsList extends Component {
   constructor(props) {
     super(props);
-
-    // this.deleteExercise = this.deleteExercise.bind(this);
 
     this.state = { projects: [] }
   }
@@ -33,16 +26,6 @@ export default class ProjectsList extends Component {
         console.log(error);
       })
   }
-
-  // deleteExercise(id) {
-  //   axios.delete('http://localhost:5000/exercises/' + id)
-  //     .then(res => console.log(res.data));
-
-  //   // automatically update state when exercise is deleted
-  //   this.setState({
-  //     exercises: this.state.exercises.filter(el => el._id !== id)
-  //   })
-  // }
 
   projectList() {
     return this.state.projects.map(currentproject => {

@@ -7,6 +7,8 @@ import Home from "./components/home.component";
 import CreateProject from "./components/create-project.component";
 import ProjectsList from "./components/projects-list.component";
 import CreateTask from "./components/create-task.component";
+import TasksList from "./components/tasks-list.component";
+import ViewTask from "./components/view-task.component"
 
 // import EditExercise from "./components/edit-exercise.component";
 
@@ -21,6 +23,8 @@ function App() {
         <Route path="/create-project" component={CreateProject} />
         <Route path="/projects/" component={ProjectsList} />
         <Route path="/create-task" component={CreateTask}/>
+        <Route path="/tasks/:id" component={ViewTask} />
+        <Route path="/tasks" exact component={TasksList}/>
         {/* <Route path="/edit/:id" component={EditExercise} /> */}
       </div>
     </Router>
