@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Alert from './alert.component';
 
 import {
   getFromStorage,
@@ -14,7 +15,7 @@ export default class Home extends Component {
       isLoading: true,
       token: '',
       signUpMessage: '',
-      signInError: '',
+      signInMessage: '',
       signInEmail: '',
       signInPassword: '',
       signUpUserName: '',
@@ -123,7 +124,8 @@ export default class Home extends Component {
           signUpFirstName: '',
           signUpLastName: '',
           signUpEmail: '',
-          signUpPassword: ''
+          signUpPassword: '',
+          signInMessage: null,
         })
       });
   }
@@ -156,6 +158,7 @@ export default class Home extends Component {
       this.setState({
         success: res.data.success,
         signInMessage: res.data.message,
+        signUpMessage: null,
         isLoading: false,
       })
     });
@@ -186,7 +189,7 @@ export default class Home extends Component {
     const {
       isLoading,
       token,
-      signInError,
+      signInMessage,
       signInEmail,
       signInPassword,
       signUpUserName,
@@ -206,11 +209,9 @@ export default class Home extends Component {
       return (
         <div>
           <div>
-            {
-              (signInError) ? (
-                <p>{signInError}</p>
-              ) : (null)
-            }
+          <div>
+            <Alert message={signInMessage} success={success}></Alert>
+          </div>
           </div>
           {/* Sign In Form */}
           <div>
@@ -232,6 +233,9 @@ export default class Home extends Component {
           <br/>
           <br/>
           {/* Sign Up Success/Error message */}
+          <div>
+            <Alert message={signUpMessage} success={success}></Alert>
+          </div>
           <div>
             {
               (signUpMessage && success) ? (

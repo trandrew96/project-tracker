@@ -25,11 +25,14 @@ router.route('/signup').post((req, res) => {
   email = email.toLowerCase();
 
   // Steps:
-  // 1. Verify email and username doesn't exist
-  // 2. Save 
+  // 1. Verify email and username don't already exist
+  // 2. Save the new user
   User.find({
-    username: username,
-    email: email
+    $or: [
+       {email: email},
+       {username: username}
+    ]
+    
   }, (err, previousUsers) => {
     if (err) {
       return res.send({
