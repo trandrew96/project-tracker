@@ -1,7 +1,8 @@
 const Task = require('../models/task.model');
-
 const router = require('express').Router();
 
+/* All routes in this file start with /api/tasks */
+/* localhost:5000/api/tasks/create */
 router.route('/create').post((req, res) => {
   const {
     project,
@@ -46,16 +47,22 @@ router.route('/create').post((req, res) => {
   
 });
 
+/* localhost:5000/api/tasks */
 router.route('/').get((req, res) => {
   Task.find()
   .then(tasks => res.json(tasks))
   .catch(err => res.status(400).json('Error: ' + err));
 })
 
+/* localhost:5000/api/tasks/5efaf9b54235fe30fc301274 */
 router.route('/:id').get((req, res) => {
   Task.findById(req.params.id)
     .then(exercise => res.json(exercise))
     .catch(err => res.status(400).json('Error: ' + err));
 })
+
+// TODO: Implement API for submitting tasks
+/* localhost:5000/api/tasks/comments/submit?taskId=5efaf9b54235fe30fc301274 */
+router.route('/comments/submit').post((req, res) => {})
 
 module.exports = router;

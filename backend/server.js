@@ -19,20 +19,20 @@ connection.once('open', () => {
   console.log("MongoDB database connection established successfully");
 })
 
-/* Delete these soon*/
-const exercisesRouter = require('./routes/exercises');
-
 /* project tracker api's */
 const signinRouter = require('./routes/signin.api.js')
 const projectsRouter = require('./routes/projects.api.js')
 const tasksRouter = require('./routes/tasks.api.js')
 const usersRouter = require('./routes/users');
 
-app.use('/exercises', exercisesRouter); // every url that starts with /exercises will be handled by exercisesrouter
-app.use('/api/users', usersRouter);
 app.use('/api/account', signinRouter);
 app.use('/api/projects', projectsRouter);
 app.use('/api/tasks', tasksRouter);
+app.use('/api/users', usersRouter);
+
+/* TODO: Delete these */
+const exercisesRouter = require('./routes/exercises');
+app.use('/exercises', exercisesRouter); // every url that starts with /exercises will be handled by exercisesrouter
 
 app.listen(port, () => {
   console.log('Server is running on port: ' + port);

@@ -20,11 +20,11 @@ function App() {
         <Navbar />
         <br/>
         <Route path="/" exact component={Home} />
-        <Route path="/create-project" component={CreateProject} />
-        <Route path="/projects/" component={ProjectsList} />
-        <Route path="/create-task" component={CreateTask}/>
-        <Route path="/tasks/:id" component={ViewTask} />
-        <Route path="/tasks" exact component={TasksList}/>
+        <Route path="/projects/create" component={CreateProject} />
+        <Route path="/projects/" exact component={ProjectsList} />
+        <Route path="/tasks/create" exact component={CreateTask}/>
+        <Route path="/tasks/comments/:id" component={ViewTask} />
+        <Route path="/tasks/" exact component={TasksList}/>
         {/* <Route path="/edit/:id" component={EditExercise} /> */}
       </div>
     </Router>

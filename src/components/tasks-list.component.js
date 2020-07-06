@@ -8,7 +8,7 @@ const Task = props => (
     <td>{props.task.subject}</td>
     <td>{props.task.type}</td>
     <td>
-      <Link to={"/tasks/"+props.task._id}>view</Link>
+      <Link to={"/tasks/comments/"+props.task._id}>view</Link>
     </td>
   </tr>
 )

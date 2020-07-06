@@ -13,6 +13,7 @@ export default class ViewTask extends Component {
     }
   }
 
+  // Grab data for the current task
   componentDidMount() {
 
     let res = {};
