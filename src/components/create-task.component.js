@@ -158,7 +158,7 @@ export default class CreateTask extends Component {
         </div>
         <form>  
           <div className="form-group"> 
-            <label>Project: </label>
+            <label>Project</label>
             <select ref="projectInput"
                 required
                 className="form-control"
@@ -175,7 +175,7 @@ export default class CreateTask extends Component {
             </select>
           </div>
           <div className="form-group"> 
-            <label>Type: </label>
+            <label>Type</label>
             <select ref="typeInput"
                 required
                 className="form-control"
@@ -186,25 +186,27 @@ export default class CreateTask extends Component {
             </select>
           </div>
           <div className="form-group"> 
-            <label>Subject: </label>
+            <label>Subject</label>
             <input ref="subjectInput"
                 required
                 className="form-control"
                 value={this.state.subject}
-                onChange={this.onChangeSubject}>
+                onChange={this.onChangeSubject}
+                placeholder="Enter a subject">
             </input>
           </div>
           <div className="form-group"> 
-            <label>Description: </label>
+            <label>Description</label>
             <input ref="descriptionInput"
                 required
                 className="form-control"
                 value={this.state.description}
-                onChange={this.onChangeDescription}>
+                onChange={this.onChangeDescription}
+                placeholder="Enter a description">
             </input>
           </div>
           <div className="form-group"> 
-            <label>Assign to: </label>
+            <label>Assign to</label>
             <select ref="assigneeInput"
                 required
                 className="form-control"

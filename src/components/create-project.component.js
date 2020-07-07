@@ -104,23 +104,25 @@ export default class CreateProject extends Component {
           </div>
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
-              <label>Title: </label>
+              <label>Title</label>
               <input 
                 type="text" 
                 required
                 className="form-control"
                 value={this.state.title} 
                 onChange={this.onChangeTitle}
+                placeholder="Enter a title"
               />
             </div>
             <div className="form-group">
-              <label>Description: </label>
+              <label>Description</label>
               <input 
                 type="text" 
                 required
                 className="form-control"
                 value={this.state.description} 
                 onChange={this.onChangeDescription}
+                placeholder="Enter a description"
               />
             </div>
             <input type="text" required hidden value = {this.state.token} readOnly/>
