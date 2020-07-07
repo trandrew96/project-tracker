@@ -29,6 +29,8 @@ export default class CreateTask extends Component {
   }
 
   componentWillMount() {
+    // Verify that the user is logged in, and get the user's username.
+    // This function is duplicated in home, create-project, create-task
     const obj = getFromStorage('project_tracker');
     console.log(obj);
     if (obj && obj.token) {

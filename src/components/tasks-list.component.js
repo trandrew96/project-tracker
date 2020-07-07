@@ -21,6 +21,7 @@ export default class TaskList extends Component {
   }
 
   componentDidMount() {
+    // Grab all data for all tasks, even though we are only displaying some of the data
     axios.get("http://localhost:5000/api/tasks")
       .then(response => {
         this.setState( { tasks: response.data } )

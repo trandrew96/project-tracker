@@ -1,4 +1,5 @@
 const Task = require('../models/task.model');
+const Comment = require('../models/comment.model');
 const router = require('express').Router();
 
 /* All routes in this file start with /api/tasks */
@@ -47,6 +48,7 @@ router.route('/create').post((req, res) => {
   
 });
 
+// Get all tasks
 /* localhost:5000/api/tasks */
 router.route('/').get((req, res) => {
   Task.find()
@@ -54,15 +56,71 @@ router.route('/').get((req, res) => {
   .catch(err => res.status(400).json('Error: ' + err));
 })
 
+// Get data for a specific task
 /* localhost:5000/api/tasks/5efaf9b54235fe30fc301274 */
 router.route('/:id').get((req, res) => {
   Task.findById(req.params.id)
-    .then(exercise => res.json(exercise))
+    .then(task => res.json(task))
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-// TODO: Implement API for submitting tasks
-/* localhost:5000/api/tasks/comments/submit?taskId=5efaf9b54235fe30fc301274 */
-router.route('/comments/submit').post((req, res) => {})
+// Submit a comment
+/* localhost:5000/api/tasks/submit-comment */
+router.route('/submit-comment').post((req, res) => {
+  // 1. Verify all fields are filled in
+  const {
+    username,
+    comment,
+    taskId
+  } = req.body;
+
+  // const taskId = req.params.id;
+
+  if (!username || !comment || !taskId ) {
+    return res.send({
+      success: false,
+      message: 'Error: All fields are required'
+    });
+  }
+
+  // 2. Verify that the task exists
+  Task.findById(req.params.id)
+    .then(task => {
+      // res.json(task)
+    })
+    .catch(err => res.status(400).json('Error: ' + err)); // Task doesn't exist
+
+  // 3. Save the comment and include taskId
+  const newComment = new Comment();
+
+  newComment.username = username;
+  newComment.comment = comment;
+  newComment.taskId = taskId;
+
+  newComment.save((err, comment) => {
+    if (err) {
+      console.log(err)
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+
+    return res.send({
+      success: true,
+      message: 'Success! Comment submitted'
+    });
+  })
+})
+
+// Get comments for a specific task
+/* localhost:5000/api/tasks/get-comments/5efaf9b54235fe30fc301274 */
+router.route('/get-comments/:id').get((req, res) => {
+  Comment.find({
+    taskId: req.params.id
+  })
+    .then(task => res.json(task))
+    .catch(err => res.status(400).json('Error: ' + err));
+})
 
 module.exports = router;

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { getFromStorage } from '../utils/storage';
 import axios from 'axios';
+import CreateComment from './create-comment.component';
+import CommentList from './view-comments.component';
 
 export default class ViewTask extends Component {
   constructor(props) {
@@ -10,40 +13,67 @@ export default class ViewTask extends Component {
       project: '',
       type: '',
       subject: '',
+      description: '',
+      creator: '',
+      assignee: '',
+      taskId: '',
     }
   }
 
-  // Grab data for the current task
   componentDidMount() {
+    // Verify that the user is logged in, and get the user's username.
+    // This function is duplicated in home, create-project, create-task
+    const obj = getFromStorage('project_tracker');
+    if (obj && obj.token) {
+      // Verify token
+      axios.get('http://localhost:5000/api/account/verify?token=' + obj.token)
+        .then(res => {
+          const data = res.data;
+          console.log(data);
+          if(data.success) {
+            this.setState({
+              username: obj.username,
+              token: obj.token,
+            });
+          }
+        })
+    } 
 
-    let res = {};
-    axios.get('http://localhost:5000/api/tasks/'+this.props.match.params.id) // we are getting the id directly from the URL
+    // Grab data for the current task
+    axios.get('http://localhost:5000/api/tasks/'+this.props.match.params.id) // we are getting the taskId directly from the URL. See App.js and notice :id
       .then(response => {
-        res = response;
         this.setState({
           project: response.data.project,
           type: response.data.type,
           subject: response.data.subject,
           description: response.data.description,
-          creator: response.data.assignee,
-          assignee: response.data.creator
+          creator: response.data.creator,
+          assignee: response.data.assignee,
+          taskId: this.props.match.params.id
         })   
       })
       .catch(function (error) {
         console.log(error);
       })
 
-      console.log(res);
   }
 
   render() {
     return (
-      <div class="card">
-        <div class="card-body">
-          <h2>{this.state.subject}</h2>
-          <p>{this.state.project} - {this.state.type}</p>
-          <p>{this.state.description}</p>
+      <div>
+        <div className="card">
+          <div className="card-body">
+            <h3>{this.state.subject}</h3>
+            <p>{this.state.project}</p>
+            <p>{this.state.type} | created by {this.state.creator} | assigned to {this.state.assignee} </p>
+            <p>{this.state.description}</p>
+          </div>
         </div>
+        <br/>
+        <CommentList taskId={this.props.match.params.id}></CommentList>
+        <br/>
+        <CreateComment taskId={this.state.taskId} username={this.state.username}></CreateComment>
+        <br/>
       </div>
     )
   }
