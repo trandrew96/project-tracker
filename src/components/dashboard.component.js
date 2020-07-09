@@ -1,7 +1,6 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import TaskList from './tasks-list.component';
-import { ListGroup, ListGroupItem, Badge, Row, Col } from 'reactstrap';
 
 class Dashboard extends Component {
   constructor(props){

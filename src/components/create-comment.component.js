@@ -1,29 +1,52 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
-// This component contains the form for submitting comments for a specific task.
-// The form will also include an input for updating the task status, if either:
-//    - current user == task creator, or
-//    - current user == task assignee
+/*
+  This component contains the form for:
+    - submitting comments on task
+    - changing the status of a task
+    - assigning the task to a user
+*/
 export default class CreateComment extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       comment: '',
-      status: this.props.status
+      status: this.props.status,
+      assignee: this.props.assignee,
+      usernames: []
     }
 
     this.onChangeComment = this.onChangeComment.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
+    this.onChangeAssignee = this.onChangeAssignee.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentDidMount(){
+    // get a list of existing usernames for the assignee field
+    axios.get('http://localhost:5000/api/users')
+    .then(res => {
+      if (res.data.length > 0) {
+        this.setState({
+          usernames: res.data.map(user => user.username),
+        })
+      } else {
+        this.setState({
+          usernames: ['(blank)'],
+        })
+      }
+    })
   }
 
   // This function sets status to the correct value
   componentDidUpdate(prevProps) {
     if (this.props.status !== prevProps.status) {
       this.setState({
-        status: this.props.status
+        status: this.props.status,
+        assignee: this.props.assignee
       })
     }
   }
@@ -39,6 +62,12 @@ export default class CreateComment extends Component {
       status: e.target.value
     })
   }
+
+  onChangeAssignee(e) {
+    this.setState({
+      assignee: e.target.value
+    })
+  }
   
   onSubmit(e){
     // e.preventDefault(e);
@@ -50,7 +79,8 @@ export default class CreateComment extends Component {
     }
 
     // Submit the comment
-    axios.post("http://localhost:5000/api/tasks/submit-comment", commentInfo)
+    if(this.state.comment != ''){
+      axios.post("http://localhost:5000/api/tasks/submit-comment", commentInfo)
       .then(res => {
         this.setState({
           success: res.data.success,
@@ -58,12 +88,18 @@ export default class CreateComment extends Component {
           comment: '',
         })
       });
+    }
 
-    const newStatus = { status: this.state.status };
+    const newTaskData = { 
+      status: this.state.status,
+      assignee: this.state.assignee
+    };
 
-    // Update task status if the form has a different status
-    if(this.state.status !== this.props.status) {
-      axios.post("http://localhost:5000/api/tasks/update-status/" + this.props.taskId, newStatus)
+    // Update Task if Status or Assignee has changed
+    if(this.state.status !== this.props.status || this.state.assignee != this.props.assignee) {
+      console.log('trying to update task');
+      console.log(newTaskData);
+      axios.post("http://localhost:5000/api/tasks/update/" + this.props.taskId, newTaskData)
       .then(res => {
         this.setState({
           success: res.data.success,
@@ -76,40 +112,65 @@ export default class CreateComment extends Component {
 
   render() {
     return(
-      <div>
-        <form>
-          <div className="form-group"> 
-             <label for="commentInput">Comment</label>
-             <input ref="commentInput"
+      <Form>
+        <Row form>
+          <Col md={12}>
+            <FormGroup> 
+              <Label for="commentInput">Comment</Label>
+              <Input ref="commentInput"
                 id="commentInput"
-                required
+                type="textarea"
                 value={this.state.comment}
                 onChange={this.onChangeComment}
                 placeholder="Add a comment..."
                 className="form-control"
                 >
-             </input>
-          </div>
-          {/* Add "Update Status" field if the currently logged in user is 'privileged' */}
-          {
-           (this.props.username === this.props.creator || this.props.username === this.props.assignee) ?
-           (
-            <div className="form-group">
-              <label for="statusInput">Status</label>
-              <select ref="statusInput"
+              </Input>
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row form>
+          <Col md={3}>
+            <FormGroup>
+              <Label for="statusInput">Change Status</Label>
+              <Input type="select" 
+                      ref="statusInput"
                       id="statusInput"
                       value={this.state.status}
                       onChange={this.onChangeStatus}
-                      className="form-control form-control-sm col-md-2">
+                      className="form-control">
                 <option key="In Progress" value="In Progress">In Progress</option>
+                <option key="In QA" value="In QA">In QA</option>
                 <option key="Resolved" value="Resolved">Resolved</option>
-              </select>
-            </div>
-           ) : null
-          }
-          <button type="submit" className="btn btn-primary" onClick={this.onSubmit}>Comment</button>
-        </form>
-      </div>
+              </Input>
+            </FormGroup>
+            </Col>
+          <Col md={3}>
+            <FormGroup>
+              <Label for="assigneeInput">Assign To</Label>
+              <Input type="select" 
+                      ref="assigneeInput"
+                      id="assigneeInput"
+                      value={this.state.assignee}
+                      onChange={this.onChangeAssignee}
+                      className="form-control">
+                  <option key="no one" value="(no one)">(no one)</option>
+                  {
+                    this.state.usernames.map(username => {
+                      return <option 
+                        key={username}
+                        value={username}>{username}
+                        </option>;
+                    })
+                  }
+              </Input>
+            </FormGroup>
+            </Col>
+        </Row>
+
+
+        <Button type="submit" color="primary" onClick={this.onSubmit}>Comment</Button>
+      </Form>
     )
   }
 }

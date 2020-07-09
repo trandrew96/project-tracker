@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { getFromStorage } from '../utils/storage';
 import Alert from './alert.component';
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Row, Col, Form, Label, Input, Button } from 'reactstrap';
 
 export default class CreateTask extends Component {
   constructor(props) {

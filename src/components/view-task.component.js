@@ -3,6 +3,7 @@ import { getFromStorage } from '../utils/storage';
 import axios from 'axios';
 import CreateComment from './create-comment.component';
 import CommentList from './view-comments.component';
+import { Row, Col } from 'reactstrap';
 
 export default class ViewTask extends Component {
   constructor(props) {
@@ -71,24 +72,30 @@ export default class ViewTask extends Component {
 
     return (
       <div>
-        <div className="card">
-          <div className="card-body">
-            <h3>{this.state.subject}</h3>
-            <p>{this.state.project}</p>
-            <p>{this.state.type} | created by {this.state.creator} | assigned to {this.state.assignee} </p>
-            <p>{this.state.description}</p>
-            <p>Status: {this.state.status}</p>
-          </div>
-        </div>
+        <Row>
+          <Col md={12}>
+            <div className="card">
+              <div className="card-body">
+                <h3>{this.state.subject}</h3>
+                <p>{this.state.project}</p>
+                <p>{this.state.type} | created by {this.state.creator} | assigned to {this.state.assignee} </p>
+                <p>{this.state.description}</p>
+                <p>Status: {this.state.status}</p>
+              </div>
+            </div>
+          </Col>
+        </Row>
+
         <br/>
         <CommentList taskId={this.props.match.params.id}></CommentList>
         <br/>
-        <CreateComment 
-          taskId={this.state.taskId} 
-          username={this.state.username} 
-          creator={this.state.creator} 
-          assignee={this.state.assignee}
-          status={this.state.status}/>
+          <CreateComment 
+            taskId={this.state.taskId} 
+            username={this.state.username} 
+            creator={this.state.creator} 
+            assignee={this.state.assignee}
+            status={this.state.status}>
+          </CreateComment>
         <br/>
       </div>
     )

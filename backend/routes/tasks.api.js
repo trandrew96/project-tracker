@@ -127,21 +127,25 @@ router.route('/get-comments/:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
-// Update a task's status
-/* localhost:5000/api/tasks/update-status/<taskId> */
-router.route('/update-status/:id').post((req, res) => {
-  if (!req.body.status ) {
+// Update a task's status or assignee
+/* localhost:5000/api/tasks/update/<taskId> */
+router.route('/update/:id').post((req, res) => {
+  if (!req.body.status && !req.body.assignee) {
     return res.send({
       success: false,
-      message: 'Error: newStatus field required'
+      message: 'Error: status or assignee field is required'
     });
   }
 
   Task.findById(req.params.id)
     .then(task => {
-      task.status = req.body.status;
+      if (req.body.status)
+        task.status = req.body.status
+      if(req.body.assignee)
+        task.assignee = req.body.assignee
+
       task.save()
-        .then(() => res.json('Task Status updated'))
+        .then(() => res.json('Task updated'))
         .catch(err => res.status(400).json('Error: ' + err))
     })
     .catch(err => res.status(400).json('Error: ' + err));

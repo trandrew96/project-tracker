@@ -100,6 +100,7 @@ export default class TaskFilter extends Component {
                       className="form-control form-control-sm">
                 <option key="None Status" value="">None</option>
                 <option key="In Progress" value="In Progress">In Progress</option>
+                <option key="In QA" value="In QA">In QA</option>
                 <option key="Resolved" value="Resolved">Resolved</option>
               </Input>
             </Col>

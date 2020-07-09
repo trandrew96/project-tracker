@@ -174,6 +174,8 @@ export default class TaskList extends Component {
         return <img src={asc} style={{height:18}}></img>
       case 'desc':
         return <img src={desc} style={{height:18}}></img>
+      default:
+        return null
     }
   }
 
