@@ -2,13 +2,22 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TaskFilter from './task-filter.component';
+import asc from '../img/asc-sort.png';
+import desc from '../img/desc-sort.png';
+import noneSort from '../img/none-sort.png';
+
+function formatDate(inputDate){
+  const date = new Date(inputDate);
+  const month = date.toLocaleString('default', { month: 'short' });
+  return month + " " + date.getDate();
+}
 
 // Renders a row for the Tasks Table. Excludes Assignee column is excludeAssignee == true
 function TaskListRow(props){
   return(
     <tr>
       <td>{props.task.project}</td>
-      <td>{props.task.subject}</td>
+      <td><Link to={"/tasks/comments/"+props.task._id}>{props.task.subject}</Link></td>
       <td>{props.task.type}</td>
       {
         (props.excludeAssignee) ? null : <td>{props.task.assignee}</td>
@@ -21,9 +30,7 @@ function TaskListRow(props){
         }[props.task.priority]
       }
       <td>{props.task.status}</td>
-      <td>
-        <Link to={"/tasks/comments/"+props.task._id}>view</Link>
-      </td>
+      <td>{formatDate(props.task.createdAt)}</td>
     </tr>
   )
 }
@@ -40,6 +47,7 @@ export default class TaskList extends Component {
       status: '',
       priority: 0,
       creator: '',
+      prioritySort: 'none',
     }
 
     this.onChangeProject = this.onChangeProject.bind(this);
@@ -50,6 +58,8 @@ export default class TaskList extends Component {
     this.onChangeCreator = this.onChangeCreator.bind(this);
     this.renderTaskList = this.renderTaskList.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.sortByPriority = this.sortByPriority.bind(this);
+    this.renderSortIcon = this.renderSortIcon.bind(this);
     this.tableHeader = this.tableHeader.bind(this);
   }
 
@@ -133,6 +143,40 @@ export default class TaskList extends Component {
       return <h3>Current Tasks</h3> 
   }
 
+  // Sort tasks by priority, or reset the order of tasks so they're sorted by date
+  sortByPriority(e){
+    let newTasksArray = [];
+    switch(this.state.prioritySort){
+      case 'none':
+        this.setState({ prioritySort: 'asc' })
+        newTasksArray = this.state.tasks.sort((a, b) => (a.priority - b.priority))
+        this.setState({ tasks: newTasksArray })
+        break
+      case 'asc':
+        this.setState({ prioritySort: 'desc'})
+        newTasksArray = this.state.tasks.sort((a, b) => (b.priority - a.priority))
+        this.setState({ tasks: newTasksArray })
+        break
+      case 'desc':
+        this.setState({ prioritySort: 'none' }) // no longer sorting by priority, so go back to sorting by date
+        newTasksArray = this.state.tasks.sort((a, b) => {return new Date(a.createdAt) - new Date(b.createdAt)})
+        this.setState({ tasks: newTasksArray })
+        break
+    }
+  }
+
+  // Render the sorting icon
+  renderSortIcon(){
+    switch(this.state.prioritySort){
+      case 'none':
+        return <img src={noneSort} style={{height:18}}></img>
+      case 'asc':
+        return <img src={asc} style={{height:18}}></img>
+      case 'desc':
+        return <img src={desc} style={{height:18}}></img>
+    }
+  }
+
   render() {
     return (
       <div>
@@ -156,9 +200,9 @@ export default class TaskList extends Component {
               {
                 (this.props.excludeAssignee) ? null : <th>Assigned To</th>
               }
-              <th>Priority</th>
+              <th><span onClick={this.sortByPriority}>Priority<span> </span>{this.renderSortIcon()}</span></th>
               <th>Status</th>
-              <th></th>
+              <th>Created</th>
             </tr>
           </thead>
           <tbody>
