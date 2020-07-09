@@ -212,6 +212,7 @@ export default class CreateTask extends Component {
                 className="form-control"
                 value={this.state.assignee}
                 onChange={this.onChangeAssignee}>
+                <option key="no one" value="(no one)">(no one)</option>
                 {
                   this.state.usernames.map(username => {
                     return <option 

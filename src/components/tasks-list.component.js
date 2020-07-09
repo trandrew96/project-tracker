@@ -7,6 +7,7 @@ const Task = props => (
     <td>{props.task.project}</td>
     <td>{props.task.subject}</td>
     <td>{props.task.type}</td>
+    <td>{props.task.assignee}</td>
     <td>
       <Link to={"/tasks/comments/"+props.task._id}>view</Link>
     </td>
@@ -47,6 +48,7 @@ export default class TaskList extends Component {
               <th>Project</th>
               <th>Subject</th>
               <th>Type</th>
+              <th>Assigned To</th>
               <th></th>
               {/* TODO: Add button for viewing specific task */}
               {/* <th>Actions</th> */}
