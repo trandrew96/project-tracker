@@ -62,7 +62,7 @@ export default class CreateComment extends Component {
     const newStatus = { status: this.state.status };
 
     // Update task status if the form has a different status
-    if(this.state.status != this.props.status) {
+    if(this.state.status !== this.props.status) {
       axios.post("http://localhost:5000/api/tasks/update-status/" + this.props.taskId, newStatus)
       .then(res => {
         this.setState({
@@ -83,7 +83,6 @@ export default class CreateComment extends Component {
              <input ref="commentInput"
                 id="commentInput"
                 required
-                className="form-control"
                 value={this.state.comment}
                 onChange={this.onChangeComment}
                 placeholder="Add a comment..."
@@ -93,13 +92,12 @@ export default class CreateComment extends Component {
           </div>
           {/* Add "Update Status" field if the currently logged in user is 'privileged' */}
           {
-           (this.props.username == this.props.creator || this.props.username == this.props.assignee) ?
+           (this.props.username === this.props.creator || this.props.username === this.props.assignee) ?
            (
             <div className="form-group">
               <label for="statusInput">Status</label>
               <select ref="statusInput"
                       id="statusInput"
-                      className="form-control"
                       value={this.state.status}
                       onChange={this.onChangeStatus}
                       className="form-control form-control-sm col-md-2">

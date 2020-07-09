@@ -47,11 +47,11 @@ export default class TaskList extends Component {
 
   taskList() {
     return this.state.tasks
-      .filter(task => { return (this.state.project != '') ? (task.project == this.state.project) : true })
-      .filter(task => { return (this.state.assignee != '') ? (task.assignee == this.state.assignee) : true })
-      .filter(task => { return (this.state.type != '') ? (task.type == this.state.type) : true })
-      .filter(task => { return (this.state.status != '') ? (task.status == this.state.status) : true })
-      .filter(task => { return (this.state.creator != '') ? (task.creator == this.state.creator) : true })
+      .filter(task => { return (this.state.project !== '') ? (task.project === this.state.project) : true })
+      .filter(task => { return (this.state.assignee !== '') ? (task.assignee === this.state.assignee) : true })
+      .filter(task => { return (this.state.type !== '') ? (task.type === this.state.type) : true })
+      .filter(task => { return (this.state.status !== '') ? (task.status === this.state.status) : true })
+      .filter(task => { return (this.state.creator !== '') ? (task.creator === this.state.creator) : true })
       .map(currenttask => {
       return <Task task={currenttask} key={currenttask._id}></Task>;
     })

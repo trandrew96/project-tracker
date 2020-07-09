@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import '../App.css';
 
-const FilterOption = (value) => {
-  return(
-    <option key={value} value={value}>{value}</option>
-  )
-}
-
 export default class TaskFilter extends Component {
 
   constructor(props){
@@ -51,10 +45,9 @@ export default class TaskFilter extends Component {
           <div className="form-row">
             <div className="col-md-2">
               <label for="projectFilter">Project</label>
-              <select onChange={this.props.onChangeProject}
+              <select 
                       ref="projectFilter"
                       id="projectFilter"
-                      className="form-control"
                       value={this.props.project}
                       onChange={this.props.onChangeProject}
                       className="form-control form-control-sm">
@@ -70,7 +63,6 @@ export default class TaskFilter extends Component {
               <label for="assigneeFilter">Assigned User</label>
               <select ref="assigneeFilter"
                       id="assigneeFilter"
-                      className="form-control"
                       value={this.props.assignee}
                       onChange={this.props.onChangeAssignee}
                       className="form-control form-control-sm">
@@ -87,7 +79,6 @@ export default class TaskFilter extends Component {
               <label for="typeFilter">Type</label>
               <select ref="typeFilter"
                       id="typeFilter"
-                      className="form-control"
                       value={this.props.type}
                       onChange={this.props.onChangeType}
                       className="form-control form-control-sm">
@@ -100,7 +91,6 @@ export default class TaskFilter extends Component {
               <label for="statusFilter">Status</label>
               <select ref="statusFilter"
                       id="statusFilter"
-                      className="form-control"
                       value={this.props.status}
                       onChange={this.props.onChangeStatus}
                       className="form-control form-control-sm">
@@ -113,7 +103,6 @@ export default class TaskFilter extends Component {
               <label for="creatorFilter">Creator</label>
               <select ref="creatorFilter"
                       id="creatorFilter"
-                      className="form-control"
                       value={this.props.creator}
                       onChange={this.props.onChangeCreator}
                       className="form-control form-control-sm">

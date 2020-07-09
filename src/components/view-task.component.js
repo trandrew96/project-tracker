@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { getFromStorage } from '../utils/storage';
 import axios from 'axios';
 import CreateComment from './create-comment.component';
