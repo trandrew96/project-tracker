@@ -3,6 +3,8 @@ const Comment = require('../models/comment.model');
 const router = require('express').Router();
 
 /* All routes in this file start with /api/tasks */
+
+// Create a task
 /* localhost:5000/api/tasks/create */
 router.route('/create').post((req, res) => {
   const {
@@ -12,9 +14,10 @@ router.route('/create').post((req, res) => {
     description,
     creator,
     assignee,
+    priority,
   } = req.body;
 
-  if (!project || !subject || !type || !creator || !assignee ) {
+  if (!project || !subject || !type || !creator || !assignee || !priority ) {
     return res.send({
       success: false,
       message: 'Error: All fields are required (except description)'
@@ -30,6 +33,7 @@ router.route('/create').post((req, res) => {
   newTask.creator = creator;
   newTask.assignee = assignee;
   newTask.description = description;
+  newTask.priority = priority;
 
   newTask.save((err, task) => {
     if (err) {

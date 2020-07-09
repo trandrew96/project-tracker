@@ -33,6 +33,11 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  priority: {
+    type: Number,
+    default: 1,
+    required: true
+  },
   status: {
     type: String,
     default: 'In Progress',

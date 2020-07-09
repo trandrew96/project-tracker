@@ -5,31 +5,27 @@ import TaskFilter from './task-filter.component';
 
 // Renders a row for the Tasks Table. Excludes Assignee column is excludeAssignee == true
 function TaskListRow(props){
-  if(props.excludeAssignee){
-    return(
-      <tr>
-        <td>{props.task.project}</td>
-        <td>{props.task.subject}</td>
-        <td>{props.task.type}</td>
-        <td>{props.task.status}</td>
-        <td>
-          <Link to={"/tasks/comments/"+props.task._id}>view</Link>
-        </td>
-      </tr>
-    );
-  } else {
-    return(
-      <tr>
-        <td>{props.task.project}</td>
-        <td>{props.task.subject}</td>
-        <td>{props.task.type}</td>
-        <td>{props.task.status}</td>
-        <td>
-          <Link to={"/tasks/comments/"+props.task._id}>view</Link>
-        </td>
-      </tr>
-    );
-  }
+  return(
+    <tr>
+      <td>{props.task.project}</td>
+      <td>{props.task.subject}</td>
+      <td>{props.task.type}</td>
+      {
+        (props.excludeAssignee) ? null : <td>{props.task.assignee}</td>
+      }
+      {
+        {
+          1: <td>Low</td>,
+          2: <td>Med</td>,
+          3: <td>High</td>
+        }[props.task.priority]
+      }
+      <td>{props.task.status}</td>
+      <td>
+        <Link to={"/tasks/comments/"+props.task._id}>view</Link>
+      </td>
+    </tr>
+  )
 }
 
 export default class TaskList extends Component {
@@ -42,6 +38,7 @@ export default class TaskList extends Component {
       assignee: '',
       type: '',
       status: '',
+      priority: 0,
       creator: '',
     }
 
@@ -49,7 +46,9 @@ export default class TaskList extends Component {
     this.onChangeAssignee = this.onChangeAssignee.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
     this.onChangeStatus = this.onChangeStatus.bind(this);
+    this.onChangePriority = this.onChangePriority.bind(this);
     this.onChangeCreator = this.onChangeCreator.bind(this);
+    this.renderTaskList = this.renderTaskList.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.tableHeader = this.tableHeader.bind(this);
   }
@@ -70,15 +69,16 @@ export default class TaskList extends Component {
 
   // If we are on the home page, then exclude "Assignee" column in table rows
   // Otherwise include all columns
-  taskList() {
+  renderTaskList() {
     return this.state.tasks
       .filter(task => { return (this.state.project !== '') ? (task.project === this.state.project) : true })
       .filter(task => { return (this.state.assignee !== '') ? (task.assignee === this.state.assignee) : true })
       .filter(task => { return (this.state.type !== '') ? (task.type === this.state.type) : true })
       .filter(task => { return (this.state.status !== '') ? (task.status === this.state.status) : true })
+      .filter(task => { return (this.state.priority != 0) ? (task.priority == this.state.priority) : true })
       .filter(task => { return (this.state.creator !== '') ? (task.creator === this.state.creator) : true })
       .map(currenttask => {
-        return <TaskListRow task={currenttask} key={currenttask._id} excludeAssignee={this.state.excludeAssignee}></TaskListRow>;
+        return <TaskListRow task={currenttask} excludeAssignee={this.props.excludeAssignee} key={currenttask._id}></TaskListRow>;
     })
   }
 
@@ -103,6 +103,12 @@ export default class TaskList extends Component {
   onChangeStatus(e){
     this.setState({
       status: e.target.value,
+    })
+  }
+
+  onChangePriority(e){
+    this.setState({
+      priority: e.target.value,
     })
   }
 
@@ -136,6 +142,7 @@ export default class TaskList extends Component {
           onChangeType={this.onChangeType} type={this.state.type}
           onChangeAssignee={this.onChangeAssignee} assignee={this.state.assignee}
           onChangeStatus={this.onChangeStatus} status={this.state.status}
+          onChangePriority={this.onChangePriority} priority={this.state.priority}
           onChangeCreator={this.onChangeCreator} creator={this.state.creator}
           excludeAssignee={this.props.excludeAssignee}
           // Somehow the TaskFilter component is calling TaskList's 'handleReset' function without it being passed as a prop
@@ -147,14 +154,15 @@ export default class TaskList extends Component {
               <th>Subject</th>
               <th>Type</th>
               {
-                (this.props.username) ? null : <th>Assigned To</th>
+                (this.props.excludeAssignee) ? null : <th>Assigned To</th>
               }
+              <th>Priority</th>
               <th>Status</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            { this.taskList() }
+            { this.renderTaskList() }
           </tbody>
         </table>
       </div>

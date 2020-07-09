@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { getFromStorage } from '../utils/storage';
 import Alert from './alert.component';
+import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap';
 
 export default class CreateTask extends Component {
   constructor(props) {
@@ -14,14 +15,15 @@ export default class CreateTask extends Component {
       type: 'bug',
       description: '',
       usernames: [],
-      creator: '',
       assignee: '(blank)',
+      priority: 1,
       message: '',
       success: false
     }
 
     this.onChangeProject = this.onChangeProject.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
+    this.onChangePriority = this.onChangePriority.bind(this);
     this.onChangeSubject = this.onChangeSubject.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
     this.onChangeAssignee = this.onChangeAssignee.bind(this);
@@ -66,6 +68,11 @@ export default class CreateTask extends Component {
   onChangeType(e) {
     this.setState({
       type: e.target.value
+    })
+  }
+  onChangePriority(e) {
+    this.setState({
+      priority: e.target.value
     })
   }
   onChangeSubject(e) {
@@ -130,6 +137,7 @@ export default class CreateTask extends Component {
       description: this.state.description,
       assignee: this.state.assignee,
       creator: this.state.creator,
+      priority: this.state.priority,
     }
 
     axios.post("http://localhost:5000/api/tasks/create", taskInfo)
@@ -156,75 +164,88 @@ export default class CreateTask extends Component {
         <div>
           <Alert message={message} success={success}></Alert>
         </div>
-        <form>  
-          <div className="form-group"> 
-            <label>Project</label>
-            <select ref="projectInput"
-                required
-                className="form-control"
-                value={this.state.project}
-                onChange={this.onChangeProject}>
-                {
-                  this.state.projects.map(project => {
-                    return <option 
-                      key={project}
-                      value={project}>{project}
-                      </option>;
-                  })
-                }
-            </select>
-          </div>
-          <div className="form-group"> 
-            <label>Type</label>
-            <select ref="typeInput"
-                required
-                className="form-control"
-                value={this.state.type}
-                onChange={this.onChangeType}>
-                <option key="bug" value="bug">Bug</option>
-                <option key="feature" value="feature">Feature</option>
-            </select>
-          </div>
-          <div className="form-group"> 
-            <label>Subject</label>
-            <input ref="subjectInput"
-                required
-                className="form-control"
-                value={this.state.subject}
-                onChange={this.onChangeSubject}
-                placeholder="Enter a subject">
-            </input>
-          </div>
-          <div className="form-group"> 
-            <label>Description</label>
-            <input ref="descriptionInput"
-                required
-                className="form-control"
-                value={this.state.description}
-                onChange={this.onChangeDescription}
-                placeholder="Enter a description">
-            </input>
-          </div>
-          <div className="form-group"> 
-            <label>Assign to</label>
-            <select ref="assigneeInput"
-                required
-                className="form-control"
-                value={this.state.assignee}
-                onChange={this.onChangeAssignee}>
-                <option key="no one" value="(no one)">(no one)</option>
-                {
-                  this.state.usernames.map(username => {
-                    return <option 
-                      key={username}
-                      value={username}>{username}
-                      </option>;
-                  })
-                }
-            </select>
-          </div>
-          <button type="submit" onClick={this.onSubmit} className="btn btn-primary">Submit Task</button>
-        </form>
+        <Form>  
+          <Row className="mb-2">
+            <Col>
+              <Label>Project</Label>
+              <Input type="select"
+                  required
+                  value={this.state.project}
+                  onChange={this.onChangeProject}>
+                  {
+                    this.state.projects.map(project => {
+                      return <option 
+                        key={project}
+                        value={project}>{project}
+                        </option>;
+                    })
+                  }
+              </Input>
+            </Col>
+            <Col>
+              <Label>Type</Label>
+              <Input type="select"
+                  required
+                  value={this.state.type}
+                  onChange={this.onChangeType}>
+                  <option key="bug" value="bug">Bug</option>
+                  <option key="feature" value="feature">Feature</option>
+              </Input>
+            </Col>
+            <Col>
+              <Label>Priority</Label>
+              <Input type="select" ref="typeInput"
+                  required
+                  value={this.state.priority}
+                  onChange={this.onChangePriority}>
+                  <option value="1">Low</option>
+                  <option value="2">Med</option>
+                  <option value="3">High</option>
+              </Input>
+            </Col>
+            <Col>
+              <Label>Assign to</Label>
+              <Input type="select"
+                  required
+                  value={this.state.assignee}
+                  onChange={this.onChangeAssignee}>
+                  <option key="no one" value="(no one)">(no one)</option>
+                  {
+                    this.state.usernames.map(username => {
+                      return <option 
+                        key={username}
+                        value={username}>{username}
+                        </option>;
+                    })
+                  }
+              </Input>
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col>
+              <Label>Subject</Label>
+              <Input
+                  required
+                  value={this.state.subject}
+                  onChange={this.onChangeSubject}
+                  placeholder="Enter a subject">
+              </Input>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col>
+              <Label>Description</Label>
+              <Input
+                  type="textarea"
+                  required
+                  value={this.state.description}
+                  onChange={this.onChangeDescription}
+                  placeholder="Enter a description">
+              </Input>
+            </Col>
+          </Row>
+          <Button type="submit" onClick={this.onSubmit} color="primary">Submit Task</Button>
+        </Form>
       </div>
     )
   }

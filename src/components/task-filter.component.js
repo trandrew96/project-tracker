@@ -81,7 +81,6 @@ export default class TaskFilter extends Component {
                 </Col>
               )
             }
-
             <Col md={2}>
               <Label>Type</Label>
               <Input type="select"
@@ -105,17 +104,20 @@ export default class TaskFilter extends Component {
               </Input>
             </Col>
             <Col md={2}>
-              <Label>Creator</Label>
+              <Label>Priority</Label>
               <Input type="select"
-                      value={this.props.creator}
-                      onChange={this.props.onChangeCreator}
+                      value={this.props.priority}
+                      onChange={this.props.onChangePriority}
                       className="form-control form-control-sm">
-                <option key="None Creator" value="">None</option>
-                {
+                <option key="None Priority" value={0}>None</option>
+                <option key="Low Priority" value={1}>Low</option>
+                <option key="Med Priority" value={2}>Med</option>
+                <option key="High Priority" value={3}>High</option>
+                {/* {
                   this.state.usernames.map(username => {
                     return <option key={username} value={username}>{username}</option>;
                   })
-                }
+                } */}
               </Input>
             </Col>
             <Col md={2} className="d-flex justify-content-center">
