@@ -123,4 +123,24 @@ router.route('/get-comments/:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 })
 
+// Update a task's status
+/* localhost:5000/api/tasks/update-status/<taskId> */
+router.route('/update-status/:id').post((req, res) => {
+  if (!req.body.status ) {
+    return res.send({
+      success: false,
+      message: 'Error: newStatus field required'
+    });
+  }
+
+  Task.findById(req.params.id)
+    .then(task => {
+      task.status = req.body.status;
+      task.save()
+        .then(() => res.json('Task Status updated'))
+        .catch(err => res.status(400).json('Error: ' + err))
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+})
+
 module.exports = router;

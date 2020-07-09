@@ -33,11 +33,10 @@ const TaskSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  comments: {
-    type: Array,
-    default: [{}],
-    required: true
-  },
+  status: {
+    type: String,
+    default: 'In Progress',
+  }
 }, {
   timestamps: true, // db will automatically create fields when object is created or modified
 });

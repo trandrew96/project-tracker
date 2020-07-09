@@ -17,6 +17,8 @@ export default class ViewTask extends Component {
       creator: '',
       assignee: '',
       taskId: '',
+      status: '',
+      isLoading: true
     }
   }
 
@@ -49,16 +51,25 @@ export default class ViewTask extends Component {
           description: response.data.description,
           creator: response.data.creator,
           assignee: response.data.assignee,
-          taskId: this.props.match.params.id
+          taskId: this.props.match.params.id,
+          status: response.data.status
         })   
       })
       .catch(function (error) {
         console.log(error);
       })
 
+    this.setState({
+      isLoading: false
+    })
   }
 
   render() {
+
+    if(this.state.isLoading){
+      return null
+    }
+
     return (
       <div>
         <div className="card">
@@ -67,12 +78,18 @@ export default class ViewTask extends Component {
             <p>{this.state.project}</p>
             <p>{this.state.type} | created by {this.state.creator} | assigned to {this.state.assignee} </p>
             <p>{this.state.description}</p>
+            <p>Status: {this.state.status}</p>
           </div>
         </div>
         <br/>
         <CommentList taskId={this.props.match.params.id}></CommentList>
         <br/>
-        <CreateComment taskId={this.state.taskId} username={this.state.username}></CreateComment>
+        <CreateComment 
+          taskId={this.state.taskId} 
+          username={this.state.username} 
+          creator={this.state.creator} 
+          assignee={this.state.assignee}
+          status={this.state.status}/>
         <br/>
       </div>
     )
