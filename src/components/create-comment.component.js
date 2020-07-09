@@ -96,16 +96,16 @@ export default class CreateComment extends Component {
            (this.props.username == this.props.creator || this.props.username == this.props.assignee) ?
            (
             <div className="form-group">
-            <label for="statusInput">Status</label>
-            <select ref="statusInput"
-                    id="statusInput"
-                    className="form-control"
-                    value={this.state.status}
-                    onChange={this.onChangeStatus}
-                    className="form-control form-control-sm col-md-2">
-              <option key="In Progress" value="In Progress">In Progress</option>
-              <option key="Resolved" value="Resolved">Resolved</option>
-            </select>
+              <label for="statusInput">Status</label>
+              <select ref="statusInput"
+                      id="statusInput"
+                      className="form-control"
+                      value={this.state.status}
+                      onChange={this.onChangeStatus}
+                      className="form-control form-control-sm col-md-2">
+                <option key="In Progress" value="In Progress">In Progress</option>
+                <option key="Resolved" value="Resolved">Resolved</option>
+              </select>
             </div>
            ) : null
           }

@@ -1,3 +1,11 @@
+/* Custom CSS */
+.margin-top-31 {
+  margin-top: 31px;
+}
+
+
+/* 
+
 .App {
   text-align: center;
 }
@@ -35,4 +43,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
