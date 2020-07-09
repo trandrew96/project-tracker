@@ -289,7 +289,6 @@ export default class Home extends Component {
 
     return (
       <div>
-        <p>Welcome {this.state.username}!</p>
         <Dashboard username={this.state.username}></Dashboard>
         <button onClick={this.logout} className="btn btn-primary">Log Out</button>
       </div>

@@ -3,18 +3,34 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import TaskFilter from './task-filter.component';
 
-const Task = props => (
-  <tr>
-    <td>{props.task.project}</td>
-    <td>{props.task.subject}</td>
-    <td>{props.task.type}</td>
-    <td>{props.task.assignee}</td>
-    <td>{props.task.status}</td>
-    <td>
-      <Link to={"/tasks/comments/"+props.task._id}>view</Link>
-    </td>
-  </tr>
-)
+// Renders a row for the Tasks Table. Excludes Assignee column is excludeAssignee == true
+function TaskListRow(props){
+  if(props.excludeAssignee){
+    return(
+      <tr>
+        <td>{props.task.project}</td>
+        <td>{props.task.subject}</td>
+        <td>{props.task.type}</td>
+        <td>{props.task.status}</td>
+        <td>
+          <Link to={"/tasks/comments/"+props.task._id}>view</Link>
+        </td>
+      </tr>
+    );
+  } else {
+    return(
+      <tr>
+        <td>{props.task.project}</td>
+        <td>{props.task.subject}</td>
+        <td>{props.task.type}</td>
+        <td>{props.task.status}</td>
+        <td>
+          <Link to={"/tasks/comments/"+props.task._id}>view</Link>
+        </td>
+      </tr>
+    );
+  }
+}
 
 export default class TaskList extends Component {
   constructor(props) {
@@ -35,6 +51,7 @@ export default class TaskList extends Component {
     this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onChangeCreator = this.onChangeCreator.bind(this);
     this.handleReset = this.handleReset.bind(this);
+    this.tableHeader = this.tableHeader.bind(this);
   }
 
   componentDidMount() {
@@ -42,9 +59,17 @@ export default class TaskList extends Component {
     axios.get("http://localhost:5000/api/tasks")
       .then(response => { this.setState( { tasks: response.data } )})
       .catch((error) => {console.log(error);})
+     
+    if(this.props.username){
+      this.setState({
+        assignee: this.props.username
+      })
+    }
 
   }
 
+  // If we are on the home page, then exclude "Assignee" column in table rows
+  // Otherwise include all columns
   taskList() {
     return this.state.tasks
       .filter(task => { return (this.state.project !== '') ? (task.project === this.state.project) : true })
@@ -53,7 +78,7 @@ export default class TaskList extends Component {
       .filter(task => { return (this.state.status !== '') ? (task.status === this.state.status) : true })
       .filter(task => { return (this.state.creator !== '') ? (task.creator === this.state.creator) : true })
       .map(currenttask => {
-      return <Task task={currenttask} key={currenttask._id}></Task>;
+        return <TaskListRow task={currenttask} key={currenttask._id} excludeAssignee={this.state.excludeAssignee}></TaskListRow>;
     })
   }
 
@@ -97,16 +122,22 @@ export default class TaskList extends Component {
     })
   }
 
+  tableHeader(){
+    if (!this.props.excludeAssignee) 
+      return <h3>Current Tasks</h3> 
+  }
+
   render() {
     return (
       <div>
-        <h3>Current Tasks</h3>
+        { this.tableHeader() }
         <TaskFilter 
           onChangeProject={this.onChangeProject} project={this.state.project}
           onChangeType={this.onChangeType} type={this.state.type}
           onChangeAssignee={this.onChangeAssignee} assignee={this.state.assignee}
           onChangeStatus={this.onChangeStatus} status={this.state.status}
           onChangeCreator={this.onChangeCreator} creator={this.state.creator}
+          excludeAssignee={this.props.excludeAssignee}
           // Somehow the TaskFilter component is calling TaskList's 'handleReset' function without it being passed as a prop
         ></TaskFilter>
         <table className="table">
@@ -115,7 +146,9 @@ export default class TaskList extends Component {
               <th>Project</th>
               <th>Subject</th>
               <th>Type</th>
-              <th>Assigned To</th>
+              {
+                (this.props.username) ? null : <th>Assigned To</th>
+              }
               <th>Status</th>
               <th></th>
             </tr>

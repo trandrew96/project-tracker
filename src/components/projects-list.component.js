@@ -42,7 +42,6 @@ export default class ProjectsList extends Component {
               <th>Project Name</th>
               <th>Description</th>
               <th>Creator</th>
-              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
