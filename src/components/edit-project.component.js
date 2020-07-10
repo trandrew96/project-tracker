@@ -17,7 +17,7 @@ function EditProjectForm({
     <Form onSubmit={onSubmit}>
       <FormGroup>
         <Label>Title</Label>
-        <Input value={title} onChange={onChangeTitle}></Input>
+        <Input value={title} onChange={onChangeTitle} disabled></Input>
       </FormGroup>
       <FormGroup>
         <Label>Description</Label>

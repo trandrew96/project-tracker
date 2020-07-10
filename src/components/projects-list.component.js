@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Row, Col, Form, Table, Input } from "reactstrap";
+import { Row, Col, Form, Table, Input, Button } from "reactstrap";
 
 function ProjectsFilter({ status, onChangeStatus }) {
   return (
@@ -40,7 +40,8 @@ function ProjectsTable({ projects }) {
               <td>{project.description}</td>
               <td>{project.status}</td>
               <td>
-                <Link to={"/projects/edit/" + project._id}>edit</Link>
+                <Link to={"/projects/edit/" + project._id}>edit</Link> |{" "}
+                <Link to={"/tasks/?project=" + project.title}>tasks</Link>
               </td>
             </tr>
           );
@@ -81,7 +82,7 @@ export default function ProjectsPage() {
     <div>
       <h4>Projects</h4>
       <Row className="mb-3">
-        <Col md={3}>
+        <Col md={3} sm={5}>
           <ProjectsFilter
             status={status}
             // onChangeStatus={onChangeStatus}
@@ -90,6 +91,15 @@ export default function ProjectsPage() {
         </Col>
       </Row>
       <ProjectsTable projects={projects}></ProjectsTable>
+      <br />
+      <br />
+      <Row>
+        <Col>
+          <Button href="/projects/create" color="primary">
+            Create Project
+          </Button>
+        </Col>
+      </Row>
     </div>
   );
 }

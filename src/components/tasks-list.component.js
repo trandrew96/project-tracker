@@ -94,6 +94,13 @@ export default class TaskList extends Component {
       });
     }
 
+    // Set filters according to query params
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    if (params.get("project")) {
+      this.setState({ project: params.get("project") });
+    }
+
     this.setState({
       loading: false,
     });
