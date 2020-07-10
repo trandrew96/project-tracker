@@ -50,6 +50,7 @@ export default class TaskList extends Component {
       priority: 0,
       creator: "",
       prioritySort: "none",
+      loading: true,
     };
 
     this.onChangeProject = this.onChangeProject.bind(this);
@@ -70,17 +71,32 @@ export default class TaskList extends Component {
     axios
       .get("http://localhost:5000/api/tasks")
       .then((response) => {
-        this.setState({ tasks: response.data });
+        // Sort tasks so that In Progress comes before In QA comes before Resolved
+        let newTasks = response.data.sort((a, b) => {
+          if (a.status < b.status) {
+            return -1;
+          }
+          if (a.status > b.status) {
+            return 1;
+          }
+          return 0;
+        });
+        this.setState({ tasks: newTasks });
       })
       .catch((error) => {
         console.log(error);
       });
 
+    // show tasks that are assigned to you if on home page
     if (this.props.username) {
       this.setState({
         assignee: this.props.username,
       });
     }
+
+    this.setState({
+      loading: false,
+    });
   }
 
   // If we are on the home page, then exclude "Assignee" column in table rows
@@ -201,6 +217,8 @@ export default class TaskList extends Component {
         });
         this.setState({ tasks: newTasksArray });
         break;
+      default:
+        break;
     }
   }
 
@@ -208,17 +226,21 @@ export default class TaskList extends Component {
   renderSortIcon() {
     switch (this.state.prioritySort) {
       case "none":
-        return <img src={noneSort} style={{ height: 18 }}></img>;
+        return (
+          <img src={noneSort} style={{ height: 18 }} alt="none-sort"></img>
+        );
       case "asc":
-        return <img src={asc} style={{ height: 18 }}></img>;
+        return <img src={asc} style={{ height: 18 }} alt="asc-sort"></img>;
       case "desc":
-        return <img src={desc} style={{ height: 18 }}></img>;
+        return <img src={desc} style={{ height: 18 }} alt="desc-sort"></img>;
       default:
         return null;
     }
   }
 
   render() {
+    if (this.state.loading) return <h1>Loading...</h1>;
+
     return (
       <div>
         {this.tableHeader()}

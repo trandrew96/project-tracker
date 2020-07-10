@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Row, Col, Form, Table, Input } from "reactstrap";
@@ -7,7 +7,11 @@ function ProjectsFilter({ status, onChangeStatus }) {
   return (
     <div>
       <Form>
-        <Input type="select" value={status} onChange={onChangeStatus}>
+        <Input
+          type="select"
+          value={status}
+          onChange={(e) => onChangeStatus(e.target.value)}
+        >
           <option value="All">All</option>
           <option value="In Progress">In Progress</option>
           <option value="Complete">Complete</option>
@@ -48,10 +52,10 @@ function ProjectsTable({ projects }) {
 
 export default function ProjectsPage() {
   const [allProjects, setAllProjects] = useState([]); // allProjects will contains all projects, and will never change
-  const [projects, setProjects] = useState([]); // projects will is a filtered version of allProjects
-  const [status, setStatus] = useState("In Progress");
+  const [projects, setProjects] = useState([]); // projects is the filtered version of allProjects and will change
+  const [status, setStatus] = useState("In Progress"); // default filter for projects
 
-  // Fetch all projects
+  // Fetch all projects when component mounts
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios.get("http://localhost:5000/api/projects");
@@ -61,18 +65,17 @@ export default function ProjectsPage() {
     fetchData();
   }, []);
 
-  // Update state when status filter is changed
-  const onChangeStatus = (e) => {
-    setStatus(e.target.value);
-    if (e.target.value != "All") {
+  // Update projects array when 'status' filter is changed
+  useEffect(() => {
+    if (status != "All") {
       const newProjects = [...allProjects].filter(
-        (project) => project.status === e.target.value
+        (project) => project.status === status
       );
       setProjects(newProjects);
     } else {
       setProjects(allProjects);
     }
-  };
+  }, [status]);
 
   return (
     <div>
@@ -81,7 +84,8 @@ export default function ProjectsPage() {
         <Col md={3}>
           <ProjectsFilter
             status={status}
-            onChangeStatus={onChangeStatus}
+            // onChangeStatus={onChangeStatus}
+            onChangeStatus={setStatus}
           ></ProjectsFilter>
         </Col>
       </Row>

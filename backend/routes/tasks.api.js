@@ -139,7 +139,12 @@ router.route("/update/:id").post((req, res) => {
 
       task
         .save()
-        .then(() => res.json("Task updated"))
+        .then(() =>
+          res.send({
+            success: true,
+            message: "Task has been updated",
+          })
+        )
         .catch((err) => res.status(400).json("Error: " + err));
     })
     .catch((err) => res.status(400).json("Error: " + err));
