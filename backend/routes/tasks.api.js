@@ -1,12 +1,12 @@
-const Task = require('../models/task.model');
-const Comment = require('../models/comment.model');
-const router = require('express').Router();
+const Task = require("../models/task.model");
+const Comment = require("../models/comment.model");
+const router = require("express").Router();
 
 /* All routes in this file start with /api/tasks */
 
 // Create a task
 /* localhost:5000/api/tasks/create */
-router.route('/create').post((req, res) => {
+router.route("/create").post((req, res) => {
   const {
     project,
     type,
@@ -17,10 +17,10 @@ router.route('/create').post((req, res) => {
     priority,
   } = req.body;
 
-  if (!project || !subject || !type || !creator || !assignee || !priority ) {
+  if (!project || !subject || !type || !creator || !assignee || !priority) {
     return res.send({
       success: false,
-      message: 'Error: All fields are required (except description)'
+      message: "Error: All fields are required (except description)",
     });
   }
 
@@ -37,62 +37,57 @@ router.route('/create').post((req, res) => {
 
   newTask.save((err, task) => {
     if (err) {
-      console.log(err)
+      console.log(err);
       return res.send({
         success: false,
-        message: 'Error: Server error'
+        message: "Error: Server error",
       });
     }
 
     return res.send({
       success: true,
-      message: 'Success! Task Created'
+      message: "Success! Task Created",
     });
-  })
-  
+  });
 });
 
 // Get all tasks
 /* localhost:5000/api/tasks */
-router.route('/').get((req, res) => {
+router.route("/").get((req, res) => {
   Task.find()
-  .then(tasks => res.json(tasks))
-  .catch(err => res.status(400).json('Error: ' + err));
-})
+    .then((tasks) => res.json(tasks))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
 
 // Get data for a specific task
 /* localhost:5000/api/tasks/5efaf9b54235fe30fc301274 */
-router.route('/:id').get((req, res) => {
+router.route("/:id").get((req, res) => {
   Task.findById(req.params.id)
-    .then(task => res.json(task))
-    .catch(err => res.status(400).json('Error: ' + err));
-})
+    .then((task) => res.json(task))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
 
 // Submit a comment
 /* localhost:5000/api/tasks/submit-comment */
-router.route('/submit-comment').post((req, res) => {
+router.route("/submit-comment").post((req, res) => {
   // 1. Verify all fields are filled in
-  const {
-    username,
-    comment,
-    taskId
-  } = req.body;
+  const { username, comment, taskId } = req.body;
 
   // const taskId = req.params.id;
 
-  if (!username || !comment || !taskId ) {
+  if (!username || !comment || !taskId) {
     return res.send({
       success: false,
-      message: 'Error: All fields are required'
+      message: "Error: All fields are required",
     });
   }
 
   // 2. Verify that the task exists
   Task.findById(req.params.id)
-    .then(task => {
+    .then((task) => {
       // res.json(task)
     })
-    .catch(err => res.status(400).json('Error: ' + err)); // Task doesn't exist
+    .catch((err) => res.status(400).json("Error: " + err)); // Task doesn't exist
 
   // 3. Save the comment and include taskId
   const newComment = new Comment();
@@ -103,52 +98,51 @@ router.route('/submit-comment').post((req, res) => {
 
   newComment.save((err, comment) => {
     if (err) {
-      console.log(err)
+      console.log(err);
       return res.send({
         success: false,
-        message: 'Error: Server error'
+        message: "Error: Server error",
       });
     }
 
     return res.send({
       success: true,
-      message: 'Success! Comment submitted'
+      message: "Success! Comment submitted",
     });
-  })
-})
+  });
+});
 
 // Get comments for a specific task
 /* localhost:5000/api/tasks/get-comments/5efaf9b54235fe30fc301274 */
-router.route('/get-comments/:id').get((req, res) => {
+router.route("/get-comments/:id").get((req, res) => {
   Comment.find({
-    taskId: req.params.id
+    taskId: req.params.id,
   })
-    .then(task => res.json(task))
-    .catch(err => res.status(400).json('Error: ' + err));
-})
+    .then((task) => res.json(task))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
 
 // Update a task's status or assignee
 /* localhost:5000/api/tasks/update/<taskId> */
-router.route('/update/:id').post((req, res) => {
+router.route("/update/:id").post((req, res) => {
   if (!req.body.status && !req.body.assignee) {
     return res.send({
       success: false,
-      message: 'Error: status or assignee field is required'
+      message: "Error: status or assignee field is required",
     });
   }
 
   Task.findById(req.params.id)
-    .then(task => {
-      if (req.body.status)
-        task.status = req.body.status
-      if(req.body.assignee)
-        task.assignee = req.body.assignee
+    .then((task) => {
+      if (req.body.status) task.status = req.body.status;
+      if (req.body.assignee) task.assignee = req.body.assignee;
 
-      task.save()
-        .then(() => res.json('Task updated'))
-        .catch(err => res.status(400).json('Error: ' + err))
+      task
+        .save()
+        .then(() => res.json("Task updated"))
+        .catch((err) => res.status(400).json("Error: " + err));
     })
-    .catch(err => res.status(400).json('Error: ' + err));
-})
+    .catch((err) => res.status(400).json("Error: " + err));
+});
 
 module.exports = router;

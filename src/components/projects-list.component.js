@@ -1,54 +1,91 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { Row, Col, Form, Table, Input } from "reactstrap";
 
-const Project = props => (
-  <tr>
-    <td>{props.project.title}</td>
-    <td>{props.project.description}</td>
-    <td>{props.project.username}</td>
-  </tr>
-)
+function ProjectsFilter({ status, onChangeStatus }) {
+  return (
+    <div>
+      <Form>
+        <Input type="select" value={status} onChange={onChangeStatus}>
+          <option value="All">All</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Complete">Complete</option>
+        </Input>
+      </Form>
+    </div>
+  );
+}
 
-export default class ProjectsList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { projects: [] }
-  }
-
-  componentDidMount() {
-    axios.get("http://localhost:5000/api/projects")
-      .then(response => {
-        this.setState( { projects: response.data } )
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  }
-
-  projectList() {
-    return this.state.projects.map(currentproject => {
-      return <Project project={currentproject} key={currentproject._id}></Project>;
-    })
-  }
-
-  render() {
-    return (
-      <div>
-        <h3>Projects</h3>
-        <table className="table">
-          <thead className="thead-light">
-            <tr>
-              <th>Project Name</th>
-              <th>Description</th>
-              <th>Creator</th>
+function ProjectsTable({ projects }) {
+  return (
+    <Table>
+      <thead className="thead-light">
+        <tr>
+          <th>Project</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Tools</th>
+        </tr>
+      </thead>
+      <tbody>
+        {projects.map((project, index) => {
+          return (
+            <tr key={index}>
+              <td>{project.title}</td>
+              <td>{project.description}</td>
+              <td>{project.status}</td>
+              <td>
+                <Link to={"/projects/edit/" + project._id}>edit</Link>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            { this.projectList() }
-          </tbody>
-        </table>
-      </div>
-    )
-  }
+          );
+        })}
+      </tbody>
+    </Table>
+  );
+}
+
+export default function ProjectsPage() {
+  const [allProjects, setAllProjects] = useState([]); // allProjects will contains all projects, and will never change
+  const [projects, setProjects] = useState([]); // projects will is a filtered version of allProjects
+  const [status, setStatus] = useState("In Progress");
+
+  // Fetch all projects
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("http://localhost:5000/api/projects");
+      setProjects(result.data.filter((project) => project.status === status));
+      setAllProjects(result.data);
+    };
+    fetchData();
+  }, []);
+
+  // Update state when status filter is changed
+  const onChangeStatus = (e) => {
+    setStatus(e.target.value);
+    if (e.target.value != "All") {
+      const newProjects = [...allProjects].filter(
+        (project) => project.status === e.target.value
+      );
+      setProjects(newProjects);
+    } else {
+      setProjects(allProjects);
+    }
+  };
+
+  return (
+    <div>
+      <h4>Projects</h4>
+      <Row className="mb-3">
+        <Col md={3}>
+          <ProjectsFilter
+            status={status}
+            onChangeStatus={onChangeStatus}
+          ></ProjectsFilter>
+        </Col>
+      </Row>
+      <ProjectsTable projects={projects}></ProjectsTable>
+    </div>
+  );
 }
