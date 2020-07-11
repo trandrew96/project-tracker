@@ -9,7 +9,7 @@ This app simplifies project management. Here is what you can do with this app:
 * Mark project's as "Complete" and automatically archive all tickets related to that project
 
 ### Setting up the project is easy
-1. $ npm install
+1. **$ npm install**
 2. Create a .env file, and create a variable called ATLAS_URI that points to your Mongo Atlas URI
 3. Start the backend server. It is currently configured to listen localhost:5000
 <br/></br>
