@@ -13,7 +13,20 @@
 <h3>Setting up the project is easy</h3>
 1. $ npm install </br>
 2. Create a .env file, and create a variable called ATLAS_URI that points to your Mongo Atlas URI</br>
-3. Start the backend server. It is currently configured to listen localhost:5000<br/>$ cd /backend<br/>$ nodemon server</br>
-4. Start the react app. The web app that you visit in the browser is hosted on Port 3000 (e.g. go to localhost:3000 in your browser)<br/>$ cd /project-tracker/<br/>$ npm start</br>
+3. Start the backend server. It is currently configured to listen localhost:5000
+<br/></br>
+**$ cd /backend**
+<br/></br>
+**$ nodemon server**
+</br></br>
+
+4. Start the react app. The web app that you visit in the browser is hosted on Port 3000 (e.g. go to localhost:3000 in your browser)
+<br/><br/>
+**$ cd /project-tracker/**
+<br/><br/>
+**$ npm start**
+
+</br>
+</br>
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
