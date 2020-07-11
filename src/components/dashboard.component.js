@@ -13,28 +13,10 @@ class Dashboard extends Component {
     };
   }
 
-  componentDidMount() {
-    axios
-      .get("http://localhost:5000/api/tasks/")
-      .then((res) => {
-        let myTasks = res.data.filter(
-          (task) => task.assignee === this.props.username
-        );
-        this.setState({
-          myTasks: myTasks,
-        });
-      })
-      .catch((err) => console.log(err));
-    this.setState({
-      loading: false,
-    });
-  }
-
   render() {
     return (
       <div>
         <h3>Welcome {this.props.username}!</h3>
-        <h4>You currently have {this.state.myTasks.length} tasks</h4>
         <TaskList
           excludeAssignee={true}
           username={this.props.username}

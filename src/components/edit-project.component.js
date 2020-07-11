@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
-import { Form, Input, Label, FormGroup, Button } from "reactstrap";
-import Alert from "./alert.component";
+import { Form, Input, Label, FormGroup, Button, Alert } from "reactstrap";
 
 function EditProjectForm({
   title,
@@ -21,7 +20,11 @@ function EditProjectForm({
       </FormGroup>
       <FormGroup>
         <Label>Description</Label>
-        <Input value={description} onChange={onChangeDescription}></Input>
+        <Input
+          type="textarea"
+          value={description}
+          onChange={onChangeDescription}
+        ></Input>
       </FormGroup>
       <FormGroup>
         <Label>Status</Label>
@@ -30,6 +33,12 @@ function EditProjectForm({
           <option value="Complete">Complete</option>
         </Input>
       </FormGroup>
+      {status == "Complete" ? (
+        <Alert color="danger">
+          Marking this project as complete will archive all tasks in this
+          project. This cannot be undone.
+        </Alert>
+      ) : null}
       <FormGroup>
         <Button type="submit" color="primary">
           Submit
@@ -101,7 +110,16 @@ export default function EditProjectPage() {
 
   return (
     <div>
-      <Alert message={message} success={success}></Alert>
+      {message && success ? (
+        <Alert message={message} color="success">
+          {message}
+        </Alert>
+      ) : null}
+      {message && !success ? (
+        <Alert message={message} color="warning">
+          {message}
+        </Alert>
+      ) : null}
       <EditProjectForm
         title={project.title}
         description={project.description}

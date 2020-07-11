@@ -1,4 +1,5 @@
 const Project = require("../models/project.model");
+const Task = require("../models/task.model");
 const router = require("express").Router();
 
 /* All URLS on this page start with /api/projects*/
@@ -80,6 +81,20 @@ router.route("/update/:id").post((req, res) => {
       success: false,
       message: "Error: Title, description, and status are required",
     });
+  }
+
+  // Mark all tasks in the project as archived if status == Complete
+  if (status == "Complete") {
+    console.log(
+      "trying to mark all tasks as archived with project == " + title
+    );
+    Task.updateMany(
+      {
+        project: title,
+      },
+      { $set: { archived: true } },
+      (err) => console.log(err)
+    );
   }
 
   Project.findById(req.params.id).then((project) => {

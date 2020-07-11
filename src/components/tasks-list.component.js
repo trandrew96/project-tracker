@@ -50,6 +50,7 @@ export default class TaskList extends Component {
       priority: 0,
       creator: "",
       prioritySort: "none",
+      showArchived: false,
       loading: true,
     };
 
@@ -59,6 +60,7 @@ export default class TaskList extends Component {
     this.onChangeStatus = this.onChangeStatus.bind(this);
     this.onChangePriority = this.onChangePriority.bind(this);
     this.onChangeCreator = this.onChangeCreator.bind(this);
+    this.onChangeArchived = this.onChangeArchived.bind(this);
     this.renderTaskList = this.renderTaskList.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.sortByPriority = this.sortByPriority.bind(this);
@@ -100,6 +102,9 @@ export default class TaskList extends Component {
     if (params.get("project")) {
       this.setState({ project: params.get("project") });
     }
+    if (params.get("archived")) {
+      this.setState({ showArchived: params.get("archived") });
+    }
 
     this.setState({
       loading: false,
@@ -137,6 +142,9 @@ export default class TaskList extends Component {
         return this.state.creator !== ""
           ? task.creator === this.state.creator
           : true;
+      })
+      .filter((task) => {
+        return this.state.showArchived ? task.archived : !task.archived;
       })
       .map((currenttask) => {
         return (
@@ -185,6 +193,12 @@ export default class TaskList extends Component {
     });
   }
 
+  onChangeArchived(e) {
+    this.setState({
+      showArchived: e.target.checked,
+    });
+  }
+
   handleReset() {
     this.setState({
       project: "",
@@ -196,7 +210,18 @@ export default class TaskList extends Component {
   }
 
   tableHeader() {
-    if (!this.props.excludeAssignee) return <h3>Current Tasks</h3>;
+    if (!this.props.excludeAssignee) {
+      if (this.state.project != "") {
+        return <h3>{this.state.project} Tasks</h3>;
+      } else {
+        return <h3>All Project Tasks</h3>;
+      }
+    } else if (this.props.username) {
+      const myTasks = this.state.tasks.filter((task) => {
+        return task.assignee == this.props.username && !task.archived;
+      });
+      return <h4>You currently have {myTasks.length} tasks</h4>;
+    }
   }
 
   // Sort tasks by priority, or reset the order of tasks so they're sorted by date
@@ -264,6 +289,8 @@ export default class TaskList extends Component {
           priority={this.state.priority}
           onChangeCreator={this.onChangeCreator}
           creator={this.state.creator}
+          onChangeArchived={this.onChangeArchived}
+          showArchived={this.state.showArchived}
           excludeAssignee={this.props.excludeAssignee}
           // Somehow the TaskFilter component is calling TaskList's 'handleReset' function without it being passed as a prop
         ></TaskFilter>

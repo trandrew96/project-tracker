@@ -41,7 +41,15 @@ function ProjectsTable({ projects }) {
               <td>{project.status}</td>
               <td>
                 <Link to={"/projects/edit/" + project._id}>edit</Link> |{" "}
-                <Link to={"/tasks/?project=" + project.title}>tasks</Link>
+                <Link
+                  to={
+                    "/tasks/?project=" +
+                    project.title +
+                    (project.status === "Complete" ? "&archived=1" : "")
+                  }
+                >
+                  tasks
+                </Link>
               </td>
             </tr>
           );
