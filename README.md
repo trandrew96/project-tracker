@@ -8,7 +8,7 @@ This app simplifies project management. Here is what you can do with this app:
 * View all tickets in one place, and optionally filter them based on assigned user, priority, status, etc.
 * Mark project's as "Complete" and automatically archive all tickets related to that project
 
-### Setting up the project is easy
+## Setting up the project is easy
 1. **$ npm install**
 2. Create a .env file, and create a variable called ATLAS_URI that points to your Mongo Atlas URI
 3. Start the backend server. It is currently configured to listen localhost:5000
@@ -22,7 +22,22 @@ This app simplifies project management. Here is what you can do with this app:
 <br/><br/>
 **$ npm start**
 
-</br>
-</br>
+## Screenshots
+### Home Page
+![Home](src/img/screenshots/screenshot-1.PNG)
+<br/>
+<br/>
+### Projects Page
+![Projects](src/img/screenshots/screenshot-2.PNG)
+<br/>
+<br/>
+### Tasks Page
+![Tasks](src/img/screenshots/screenshot-3.PNG)
+<br/>
+<br/>
+### Create Task Form
+![Task Form](src/img/screenshots/screenshot-6.PNG)
+<br/>
+<br/>
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
