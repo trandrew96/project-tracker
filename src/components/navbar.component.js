@@ -5,11 +5,18 @@ export default class Navbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
-        <Link to="/" className="navbar-brand">
-          Home
-        </Link>
         <div className="collpase navbar-collapse">
           <ul className="navbar-nav mr-auto">
+            <li className="navbar-item">
+              <NavLink
+                to="/"
+                exact
+                className="nav-link"
+                activeClassName="active"
+              >
+                Home
+              </NavLink>
+            </li>
             <li className="navbar-item">
               <NavLink
                 to="/projects"
