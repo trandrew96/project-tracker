@@ -23,25 +23,20 @@ This app simplifies project management. Here is what you can do with this app:
 **$ npm start**
 
 ## Screenshots
+### Create Task Form
+![Task Form](src/img/screenshots/screenshot-4.PNG)
+<br/>
 ### Home Page
 ![Home](src/img/screenshots/screenshot-1.PNG)
-<br/>
 <br/>
 ### Viewing a task
 ![TaskView](src/img/screenshots/screenshot-taskview.PNG)
 <br/>
-<br/>
 ### Projects Page
 ![Projects](src/img/screenshots/screenshot-2.PNG)
 <br/>
-<br/>
-### Tasks Page
+### Tasks Page for viewing all tasks
 ![Tasks](src/img/screenshots/screenshot-3.PNG)
-<br/>
-<br/>
-### Create Task Form
-![Task Form](src/img/screenshots/screenshot-6.PNG)
-<br/>
 <br/>
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
