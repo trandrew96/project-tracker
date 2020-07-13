@@ -27,6 +27,10 @@ This app simplifies project management. Here is what you can do with this app:
 ![Home](src/img/screenshots/screenshot-1.PNG)
 <br/>
 <br/>
+### Viewing a task
+![TaskView](src/img/screenshots/screenshot-taskview.PNG)
+<br/>
+<br/>
 ### Projects Page
 ![Projects](src/img/screenshots/screenshot-2.PNG)
 <br/>
